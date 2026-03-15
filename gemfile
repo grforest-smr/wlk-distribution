@@ -1,0 +1,28 @@
+# Gemfile
+source "https://rubygems.org"
+
+ruby "3.2.0"
+
+gem "rails", "~> 7.0.8"
+gem "pg", "~> 1.5"
+gem "puma", "~> 6.4"
+
+# CORS для фронтенда
+gem "rack-cors"
+
+# Работа с переменными окружения
+gem "dotenv-rails", groups: [:development, :test]
+
+# Для админки (опционально)
+# gem "activeadmin"
+
+group :development, :test do
+  gem "debug"
+  gem "rspec-rails", "~> 6.0"
+  gem "factory_bot_rails"
+  gem "faker"
+end
+
+group :development do
+  gem "spring"
+end

@@ -23,6 +23,20 @@ module WlkDistribution
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 8.0
 
+    # Явно указываем пути к views
+    config.paths["app/views"] = Rails.root.join("app/views")
+    config.paths["app/helpers"] = Rails.root.join("app/helpers")
+    
+    # Включаем полный стек middleware
+    config.middleware.use ActionDispatch::Flash
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use ActionDispatch::Session::CookieStore
+
+    # Настройки I18n для мультиязычности
+    config.i18n.available_locales = [:ru, :en, :ko, :ja]
+    config.i18n.default_locale = :ru
+    config.i18n.fallbacks = [:ru]
+
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
@@ -39,6 +53,6 @@ module WlkDistribution
     # Only loads a smaller set of middleware suitable for API only apps.
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
-    config.api_only = true
+    # config.api_only = true
   end
 end

@@ -1,0 +1,202 @@
+<div class="max-w-4xl mx-auto p-6">
+  <div class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl font-bold" data-i18n="adminTitle">⚙️ Админ-панель</h1>
+    <a href="/" class="text-blue-500 hover:text-blue-700" data-i18n="backToMain">← На главную</a>
+  </div>
+
+  <!-- Переключатель языков для админки -->
+  <div class="flex justify-end space-x-2 mb-4">
+    <button onclick="setLanguage('ru')" class="px-3 py-1 border rounded hover:bg-gray-100">Русский</button>
+    <button onclick="setLanguage('en')" class="px-3 py-1 border rounded hover:bg-gray-100">English</button>
+    <button onclick="setLanguage('ko')" class="px-3 py-1 border rounded hover:bg-gray-100">한국어</button>
+    <button onclick="setLanguage('ja')" class="px-3 py-1 border rounded hover:bg-gray-100">日本語</button>
+  </div>
+
+  <!-- Настройки распределения -->
+  <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+    <h2 class="text-2xl font-semibold mb-6" data-i18n="distributionSettings">⚙️ Настройки распределения</h2>
+    
+    <div class="space-y-4 mb-6">
+      <div>
+        <label class="block text-gray-700 font-bold mb-2" data-i18n="maxInTower">
+          Макс. участников в башне
+        </label>
+        <input type="number" id="max_players_in_tower" class="w-full p-2 border rounded">
+      </div>
+      
+      <div>
+        <label class="block text-gray-700 font-bold mb-2" data-i18n="maxInTC">
+          Макс. участников в ТЦ
+        </label>
+        <input type="number" id="max_players_in_tc" class="w-full p-2 border rounded">
+      </div>
+      
+      <div>
+        <label class="block text-gray-700 font-bold mb-2" data-i18n="reservePerBuilding">
+          Количество запасных на здание
+        </label>
+        <input type="number" id="reserve_per_building" class="w-full p-2 border rounded" value="0">
+      </div>
+    </div>
+
+    <button id="saveSettings" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-6 rounded" data-i18n="saveSettings">
+      Сохранить настройки
+    </button>
+  </div>
+
+  <!-- Типы войск для зданий -->
+  <div class="bg-white rounded-lg shadow-lg p-6">
+    <h2 class="text-2xl font-semibold mb-6" data-i18n="buildingTypes">🏢 Типы войск в зданиях</h2>
+    
+    <div class="space-y-4 mb-6" id="buildingTypes">
+      <!-- Заполняется JavaScript -->
+    </div>
+
+    <button id="saveBuildingTypes" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-6 rounded" data-i18n="saveTypes">
+      Сохранить типы
+    </button>
+  </div>
+
+  <!-- Сообщения -->
+  <div id="adminMessage" class="hidden mt-4 p-4 rounded"></div>
+</div>
+
+<script src="/translations.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  loadSettings();
+  loadBuildingTypes();
+  
+  document.getElementById('saveSettings').addEventListener('click', saveSettings);
+  document.getElementById('saveBuildingTypes').addEventListener('click', saveBuildingTypes);
+});
+
+async function loadSettings() {
+  try {
+    const response = await fetch('/api/v1/configs');
+    const result = await response.json();
+    
+    if (result.status === 'success') {
+      result.data.forEach(config => {
+        const input = document.getElementById(config.key);
+        if (input) input.value = config.value;
+      });
+    }
+  } catch (error) {
+    console.error('Error loading settings:', error);
+  }
+}
+
+// Загрузка типов зданий
+async function loadBuildingTypes() {
+  try {
+    const response = await fetch('/api/v1/building_troop_types');
+    const result = await response.json();
+    
+    // Массив зданий с ключами для перевода
+    const allBuildings = [
+      { key: 'tower_tc', name: 'ТЦ' },
+      { key: 'tower_north', name: 'Северная' },
+      { key: 'tower_south', name: 'Южная' },
+      { key: 'tower_west', name: 'Западная' },
+      { key: 'tower_east', name: 'Восточная' }
+    ];
+    
+    const container = document.getElementById('buildingTypes');
+    container.innerHTML = '';
+    
+    // Создаем хеш с текущими значениями из базы
+    const currentTypes = {};
+    if (result.status === 'success') {
+      result.data.forEach(item => {
+        currentTypes[item.building] = item.troop_type;
+      });
+    }
+    
+    // Для каждого здания создаем выпадающий список
+    allBuildings.forEach(building => {
+      const currentValue = currentTypes[building.name] || '';
+      
+      const div = document.createElement('div');
+      div.className = 'flex items-center';
+      div.innerHTML = `
+        <span class="w-32 font-medium">${t(building.key)}:</span>
+        <select data-building="${building.name}" class="building-type-select flex-1 p-2 border rounded">
+          <option value="" ${currentValue === '' ? 'selected' : ''}>${t('auto')}</option>
+          <option value="Боец" ${currentValue === 'Боец' ? 'selected' : ''}>${t('fighter')}</option>
+          <option value="Стрелок" ${currentValue === 'Стрелок' ? 'selected' : ''}>${t('archer')}</option>
+          <option value="Наездник" ${currentValue === 'Наездник' ? 'selected' : ''}>${t('rider')}</option>
+        </select>
+      `;
+      container.appendChild(div);
+    });
+    
+    // Обновляем переводы для новых элементов
+    translatePage();
+  } catch (error) {
+    console.error('Error loading building types:', error);
+  }
+}
+
+async function saveSettings() {
+  const settings = [
+    { key: 'max_players_in_tower', value: document.getElementById('max_players_in_tower').value },
+    { key: 'max_players_in_tc', value: document.getElementById('max_players_in_tc').value },
+    { key: 'reserve_per_building', value: document.getElementById('reserve_per_building').value }
+  ];
+
+  try {
+    for (const setting of settings) {
+      await fetch(`/api/v1/configs/${setting.key}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ value: setting.value })
+      });
+    }
+    showMessage(t('settingsSaved'), 'success');
+  } catch (error) {
+    showMessage(t('error'), 'error');
+  }
+}
+
+async function saveBuildingTypes() {
+  const selects = document.querySelectorAll('.building-type-select');
+  
+  try {
+    for (const select of selects) {
+      const building = select.dataset.building;
+      const troop_type = select.value;
+      
+      const response = await fetch(`/api/v1/building_troop_types/${encodeURIComponent(building)}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ troop_type })
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        console.error('Error:', error);
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    }
+    showMessage(t('typesSaved'), 'success');
+    loadBuildingTypes(); // Перезагружаем типы
+  } catch (error) {
+    console.error('Save error:', error);
+    showMessage(t('error'), 'error');
+  }
+}
+
+function showMessage(text, type) {
+  const msg = document.getElementById('adminMessage');
+  msg.textContent = text;
+  msg.className = `p-4 rounded ${
+    type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+  }`;
+  msg.classList.remove('hidden');
+
+  setTimeout(() => {
+    msg.classList.add('hidden');
+  }, 5000);
+}
+</script>

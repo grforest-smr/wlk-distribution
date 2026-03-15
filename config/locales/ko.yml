@@ -1,0 +1,101 @@
+ko:
+  # Headers
+  title: '⚔️ 플레이어 분배 시스템'
+  
+  # Settings
+  distributionSettings: '⚙️ 분배 설정'
+  maxInTower: '타워 최대 인원'
+  maxInTC: 'TC 최대 인원'
+  reservePerBuilding: '건물당 예비 인원'
+  no_file_chosen: '선택된 파일 없음'
+
+  # Building types
+  buildingTypes: '🏢 건물 병종'
+  auto: '🤖 자동'
+  saveTypes: '유형 저장'
+  
+  # CSV Upload
+  uploadTitle: '📤 플레이어 데이터 업로드'
+  uploadDescription: 'Google Sheets에서 내보낸 CSV 파일 업로드'
+  uploadFormat: '형식: nickname,alliance,troop_type,level,march_size,group_attack,troop_power,slot,wants_captain'
+  chooseFile: '파일 선택'
+  useStrength: '강점 계산 사용 (비활성화시 행군 크기로만 분배)'
+  uploadButton: '업로드 및 처리'
+  
+  # Buttons
+  showPlayers: '로드된 플레이어 보기'
+  saveSettings: '설정 저장'
+  runDistribution: '🎯 분배 실행'
+  loadedPlayers: '로드된 플레이어'
+  loadedCount:
+    one: '로드됨: %{count}명'
+    other: '로드됨: %{count}명'
+  
+  # Results
+  results: '📊 분배 결과'
+  slot: '슬롯'
+  captain: '👑 대장'
+  participants: '참가자'
+  noParticipants: '참가자 없음'
+  totalParticipants: '참가자 총 병력'
+  captainGA: '대장 GA'
+  usageGA: 'GA 사용률'
+  
+  # Unassigned
+  unassigned: '⚠️ 미배치 플레이어'
+  
+  # Messages
+  success: '✅ 성공'
+  error: '❌ 오류'
+  fileRequired: '파일을 선택하세요'
+  playersLoaded:
+    one: '✅ %{count}명의 플레이어 로드됨'
+    other: '✅ %{count}명의 플레이어 로드됨'
+  distributionCompleted: '✅ 분배 완료'
+  settingsSaved: '✅ 모든 설정 저장됨'
+  typesSaved: '✅ 건물 유형 저장됨'
+  
+  # Player table
+  nickname: '닉네임'
+  alliance: '연맹'
+  type: '유형'
+  march: '행군'
+  ga: 'GA'
+  
+  # Statistics
+  analytics: '📊 플레이어 분석'
+  total: '총 플레이어'
+  totalMarch: '총 행군'
+  totalGA: '총 GA'
+  totalPower: '총 전력'
+  byType: '병종별'
+  byLevel: '레벨별'
+  bySlot: '슬롯별'
+  byCaptain: '대장 희망'
+  wantCaptain: '대장 희망'
+  dontWantCaptain: '희망하지 않음'
+  indifferent: '상관없음'
+  
+  # Building names
+  tower_tc: '테크노 센터'
+  tower_north: '북부'
+  tower_south: '남부'
+  tower_west: '서부'
+  tower_east: '동부'
+  
+  # Troop types
+  fighter: '보병'
+  archer: '궁병'
+  rider: '기병'
+  
+  # Slots
+  slot1: '슬롯 1'
+  slot2: '슬롯 2'
+  any: '모든'
+  
+  # Statuses
+  participant: '참가자'
+  no_participants: '참가자 없음'
+  
+  # Additional message keys used in JavaScript
+  no_players: '로드된 플레이어 없음'

@@ -1,0 +1,102 @@
+ru:
+  # Заголовки
+  title: '⚔️ Система распределения игроков'
+  
+  # Настройки
+  distributionSettings: '⚙️ Настройки распределения'
+  maxInTower: 'Макс. участников в башне'
+  maxInTC: 'Макс. участников в ТЦ'
+  reservePerBuilding: 'Количество запасных на здание'
+  
+  # Типы зданий
+  buildingTypes: '🏢 Типы войск в зданиях'
+  auto: '🤖 Авто'
+  saveTypes: 'Сохранить типы'
+  
+  # Загрузка CSV
+  uploadTitle: '📤 Загрузка данных игроков'
+  uploadDescription: 'Загрузите CSV файл, экспортированный из Google Sheets'
+  uploadFormat: 'Формат: nickname,alliance,troop_type,level,march_size,group_attack,troop_power,slot,wants_captain'
+  chooseFile: 'Выберите файл'
+  useStrength: 'Использовать расчет силы (если отключено - распределение только по размеру марша)'
+  uploadButton: 'Загрузить и обработать'
+  
+  # Кнопки
+  showPlayers: 'Показать загруженных игроков'
+  saveSettings: 'Сохранить настройки'
+  runDistribution: '🎯 Запустить распределение'
+  loadedPlayers: 'Загруженные игроки'
+  loadedCount:
+    one: 'Загружено: %{count} игрок'
+    few: 'Загружено: %{count} игрока'
+    many: 'Загружено: %{count} игроков'
+    other: 'Загружено: %{count} игроков'
+  
+  # Результаты
+  results: '📊 Результаты распределения'
+  slot: 'СЛОТ'
+  captain: '👑 Капитан'
+  participants: 'Участники'
+  noParticipants: 'Нет участников'
+  totalParticipants: 'Всего войск участников'
+  captainGA: 'ГА капитана'
+  usageGA: 'Использовано ГА'
+  no_file_chosen: 'Файл не выбран'
+
+  # Нераспределенные
+  unassigned: '⚠️ Нераспределенные игроки'
+  
+  # Сообщения
+  success: '✅ Успешно'
+  error: '❌ Ошибка'
+  fileRequired: 'Выберите файл'
+  playersLoaded:
+    one: '✅ Загружен %{count} игрок'
+    few: '✅ Загружено %{count} игрока'
+    many: '✅ Загружено %{count} игроков'
+    other: '✅ Загружено %{count} игроков'
+  distributionCompleted: '✅ Распределение выполнено'
+  settingsSaved: '✅ Все настройки сохранены'
+  typesSaved: '✅ Типы зданий сохранены'
+  
+  # Таблица игроков
+  nickname: 'Ник'
+  alliance: 'Альянс'
+  type: 'Тип'
+  march: 'Марш'
+  ga: 'ГА'
+  
+  # Статистика
+  analytics: '📊 Аналитика по игрокам'
+  total: 'Всего игроков'
+  totalMarch: 'Сумма маршей'
+  totalGA: 'Сумма ГА'
+  totalPower: 'Сумма силы'
+  byType: 'По типам войск'
+  byLevel: 'По уровням'
+  bySlot: 'По слотам'
+  byCaptain: 'Желание быть капитаном'
+  wantCaptain: 'Хотят быть капитаном'
+  dontWantCaptain: 'Не хотят'
+  indifferent: 'Не важно'
+  
+  # Названия зданий
+  tower_tc: 'Техно Центр'
+  tower_north: 'Северная'
+  tower_south: 'Южная'
+  tower_west: 'Западная'
+  tower_east: 'Восточная'
+  
+  # Типы войск
+  fighter: 'Боец'
+  archer: 'Стрелок'
+  rider: 'Наездник'
+  
+  # Слоты
+  slot1: 'Слот 1'
+  slot2: 'Слот 2'
+  any: 'Любое'
+  
+  # Статусы
+  participant: 'Участник'
+  no_participants: 'Нет участников'

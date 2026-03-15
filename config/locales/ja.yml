@@ -1,0 +1,102 @@
+ja:
+  # Headers
+  title: '⚔️ プレイヤー分配システム'
+  
+  # Settings
+  distributionSettings: '⚙️ 分配設定'
+  maxInTower: 'タワー最大人数'
+  maxInTC: 'TC最大人数'
+  reservePerBuilding: '建物別予備人数'
+  no_file_chosen: 'ファイルが選択されていません'
+
+  
+  # Building types
+  buildingTypes: '🏢 建物兵種'
+  auto: '🤖 自動'
+  saveTypes: 'タイプを保存'
+  
+  # CSV Upload
+  uploadTitle: '📤 プレイヤーデータアップロード'
+  uploadDescription: 'Google SheetsからエクスポートしたCSVファイルをアップロード'
+  uploadFormat: '形式: nickname,alliance,troop_type,level,march_size,group_attack,troop_power,slot,wants_captain'
+  chooseFile: 'ファイルを選択'
+  useStrength: '強さ計算を使用 (無効の場合は行軍サイズのみで分配)'
+  uploadButton: 'アップロードして処理'
+  
+  # Buttons
+  showPlayers: '読み込んだプレイヤーを表示'
+  saveSettings: '設定を保存'
+  runDistribution: '🎯 分配を実行'
+  loadedPlayers: '読み込んだプレイヤー'
+  loadedCount:
+    one: '読み込み: %{count}人'
+    other: '読み込み: %{count}人'
+  
+  # Results
+  results: '📊 分配結果'
+  slot: 'スロット'
+  captain: '👑 キャプテン'
+  participants: '参加者'
+  noParticipants: '参加者なし'
+  totalParticipants: '参加者総兵力'
+  captainGA: 'キャプテンGA'
+  usageGA: 'GA使用率'
+  
+  # Unassigned
+  unassigned: '⚠️ 未割当プレイヤー'
+  
+  # Messages
+  success: '✅ 成功'
+  error: '❌ エラー'
+  fileRequired: 'ファイルを選択してください'
+  playersLoaded:
+    one: '✅ %{count}人のプレイヤーを読み込みました'
+    other: '✅ %{count}人のプレイヤーを読み込みました'
+  distributionCompleted: '✅ 分配が完了しました'
+  settingsSaved: '✅ すべての設定を保存しました'
+  typesSaved: '✅ 建物タイプを保存しました'
+  
+  # Player table
+  nickname: 'ニックネーム'
+  alliance: 'アライアンス'
+  type: 'タイプ'
+  march: '行軍'
+  ga: 'GA'
+  
+  # Statistics
+  analytics: '📊 プレイヤー分析'
+  total: '総プレイヤー数'
+  totalMarch: '総行軍'
+  totalGA: '総GA'
+  totalPower: '総戦力'
+  byType: '兵種別'
+  byLevel: 'レベル別'
+  bySlot: 'スロット別'
+  byCaptain: 'キャプテン希望'
+  wantCaptain: 'キャプテン希望'
+  dontWantCaptain: '希望しない'
+  indifferent: 'どちらでも'
+  
+  # Building names
+  tower_tc: 'テクノセンター'
+  tower_north: '北部'
+  tower_south: '南部'
+  tower_west: '西部'
+  tower_east: '東部'
+  
+  # Troop types
+  fighter: '歩兵'
+  archer: '弓兵'
+  rider: '騎兵'
+  
+  # Slots
+  slot1: 'スロット 1'
+  slot2: 'スロット 2'
+  any: '任意'
+  
+  # Statuses
+  participant: '参加者'
+  no_participants: '参加者なし'
+  
+  # Additional message keys used in JavaScript
+  no_players: '読み込んだプレイヤーがいません'

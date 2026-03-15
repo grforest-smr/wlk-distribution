@@ -1,0 +1,132 @@
+<div class="w-full max-w-2xl mx-auto" data-controller="register">
+  <h1 class="text-3xl font-bold text-center mb-8">📝 Регистрация на ивент</h1>
+  
+  <div id="message" class="mb-4 hidden"></div>
+  
+  <form id="registrationForm" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="nickname">
+        Никнейм *
+      </label>
+      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+             id="nickname" name="nickname" type="text" required>
+    </div>
+
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="alliance">
+        Альянс
+      </label>
+      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+             id="alliance" name="alliance" type="text">
+    </div>
+
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="troop_type">
+        Тип войск *
+      </label>
+      <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+              id="troop_type" name="troop_type" required>
+        <option value="">Выберите тип</option>
+        <option value="Боец">Боец</option>
+        <option value="Стрелок">Стрелок</option>
+        <option value="Наездник">Наездник</option>
+      </select>
+    </div>
+
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="level">
+        Уровень войск *
+      </label>
+      <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+              id="level" name="level" required>
+        <option value="">Выберите уровень</option>
+        <option value="T14">T14</option>
+        <option value="T13">T13</option>
+        <option value="T12">T12</option>
+        <option value="T11">T11</option>
+        <option value="T10">T10</option>
+        <option value="T9">T9</option>
+        <option value="T8">T8</option>
+        <option value="T7">T7</option>
+        <option value="T6">T6</option>
+        <option value="T5">T5</option>
+        <option value="T4">T4</option>
+      </select>
+    </div>
+
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="march_size">
+        Размер марша *
+      </label>
+      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+             id="march_size" name="march_size" type="number" min="1" required>
+    </div>
+
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="group_attack">
+        Групповая атака
+      </label>
+      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+             id="group_attack" name="group_attack" type="number" min="0">
+    </div>
+
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="troop_power">
+        Мощность войск
+      </label>
+      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+             id="troop_power" name="troop_power" type="number" min="0">
+    </div>
+
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2">
+        Предпочтение слота
+      </label>
+      <div class="flex space-x-4">
+        <label class="inline-flex items-center">
+          <input type="radio" class="form-radio" name="slot" value="Слот1">
+          <span class="ml-2">Слот 1</span>
+        </label>
+        <label class="inline-flex items-center">
+          <input type="radio" class="form-radio" name="slot" value="Слот2">
+          <span class="ml-2">Слот 2</span>
+        </label>
+        <label class="inline-flex items-center">
+          <input type="radio" class="form-radio" name="slot" value="Любое" checked>
+          <span class="ml-2">Любое</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="mb-6">
+      <label class="block text-gray-700 text-sm font-bold mb-2">
+        Хотите быть капитаном?
+      </label>
+      <div class="flex space-x-4">
+        <label class="inline-flex items-center">
+          <input type="radio" class="form-radio" name="wants_captain" value="Да">
+          <span class="ml-2">Да</span>
+        </label>
+        <label class="inline-flex items-center">
+          <input type="radio" class="form-radio" name="wants_captain" value="Нет">
+          <span class="ml-2">Нет</span>
+        </label>
+        <label class="inline-flex items-center">
+          <input type="radio" class="form-radio" name="wants_captain" value="Не важно" checked>
+          <span class="ml-2">Не важно</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between">
+      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+        Зарегистрироваться
+      </button>
+      <%= link_to "На главную", root_path, class: "text-blue-500 hover:text-blue-800" %>
+    </div>
+  </form>
+</div>
+<div id="message" class="mb-4 hidden" data-register-target="message"></div>
+  
+<form id="registrationForm" data-register-target="form" data-action="submit->register#submit" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+

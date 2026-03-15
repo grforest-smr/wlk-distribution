@@ -1,0 +1,14 @@
+// app/javascript/controllers/index.js
+import { application } from "../application"
+
+import IndexController from "./index_controller"
+application.register("index", IndexController)
+
+import RegisterController from "./register_controller"
+application.register("register", RegisterController)
+
+import ResultsController from "./results_controller"
+application.register("results", ResultsController)
+
+import AdminController from "./admin_controller"
+application.register("admin", AdminController)

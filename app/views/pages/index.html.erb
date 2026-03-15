@@ -1,0 +1,178 @@
+<div class="max-w-6xl mx-auto p-6" 
+     data-controller="index"
+     data-translations='<%= {
+       auto: t('auto'),
+       fighter: t('fighter'),
+       archer: t('archer'),
+       rider: t('rider'),
+       tower_tc: t('tower_tc'),
+       tower_north: t('tower_north'),
+       tower_south: t('tower_south'),
+       tower_west: t('tower_west'),
+       tower_east: t('tower_east'),
+       captain: t('captain'),
+       type: t('type'),
+       ga: t('ga'),
+       march: t('march'),
+       participants: t('participants'),
+       totalParticipants: t('totalParticipants'),
+       captainGA: t('captainGA'),
+       usageGA: t('usageGA'),
+       no_participants: t('no_participants'),
+       nickname: t('nickname'),
+       alliance: t('alliance'),
+       slot1: t('slot1'),
+       slot2: t('slot2'),
+       any: t('any'),
+       saveSettings: t('saveSettings'),
+       saveTypes: t('saveTypes'),
+       uploadButton: t('uploadButton'),
+       showPlayers: t('showPlayers'),
+       runDistribution: t('runDistribution'),
+       results: t('results'),
+       slot: t('slot'),
+       unassigned: t('unassigned'),
+       loadedPlayers: t('loadedPlayers'),
+       loadedCount: t('loadedCount', count: 0),
+       fileRequired: t('fileRequired'),
+       playersLoaded: t('playersLoaded'),
+       distributionCompleted: t('distributionCompleted'),
+       settingsSaved: t('settingsSaved'),
+       typesSaved: t('typesSaved'),
+       error: t('error'),
+       no_file_chosen: t('no_file_chosen'),
+       chooseFile: t('chooseFile')
+     }.to_json %>'>
+  
+  <h1 class="text-3xl font-bold text-center mb-8"><%= t('title') %></h1>
+  
+  <!-- Переключатель языков -->
+  <div class="flex justify-end space-x-2 mb-4">
+    <%= link_to 'Русский', url_for(locale: :ru), class: 'px-3 py-1 border rounded hover:bg-gray-100' %>
+    <%= link_to 'English', url_for(locale: :en), class: 'px-3 py-1 border rounded hover:bg-gray-100' %>
+    <%= link_to '한국어', url_for(locale: :ko), class: 'px-3 py-1 border rounded hover:bg-gray-100' %>
+    <%= link_to '日本語', url_for(locale: :ja), class: 'px-3 py-1 border rounded hover:bg-gray-100' %>
+  </div>
+
+  <!-- Секция настроек -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+    <!-- Настройки распределения -->
+    <div class="bg-white rounded-lg shadow-lg p-6">
+      <h2 class="text-2xl font-semibold mb-4"><%= t('distributionSettings') %></h2>
+      
+      <div class="space-y-4">
+        <div>
+          <label class="block text-gray-700 font-bold mb-2"><%= t('maxInTower') %></label>
+          <input type="number" id="max_players_in_tower" class="w-full p-2 border rounded">
+        </div>
+        
+        <div>
+          <label class="block text-gray-700 font-bold mb-2"><%= t('maxInTC') %></label>
+          <input type="number" id="max_players_in_tc" class="w-full p-2 border rounded">
+        </div>
+        
+        <div>
+          <label class="block text-gray-700 font-bold mb-2"><%= t('reservePerBuilding') %></label>
+          <input type="number" id="reserve_per_building" class="w-full p-2 border rounded" value="0">
+        </div>
+        
+        <div class="pt-4">
+          <button id="saveSettingsBtn" data-action="click->index#saveAllSettings" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-6 rounded">
+            <%= t('saveSettings') %>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Типы войск для зданий -->
+    <div class="bg-white rounded-lg shadow-lg p-6">
+      <h2 class="text-2xl font-semibold mb-4"><%= t('buildingTypes') %></h2>
+      
+      <div class="space-y-4" id="buildingTypes">
+        <!-- Заполняется JavaScript -->
+      </div>
+      
+      <button id="saveTypesBtn" data-action="click->index#saveBuildingTypes" class="mt-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+        <%= t('saveTypes') %>
+      </button>
+    </div>
+  </div>
+
+  <!-- Секция загрузки CSV (кастомный файловый инпут) -->
+  <!-- Секция загрузки CSV -->
+<div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+  <h2 class="text-2xl font-semibold mb-4"><%= t('uploadTitle') %></h2>
+  
+  <div class="mb-4">
+    <p class="text-gray-600 mb-2"><%= t('uploadDescription') %></p>
+    <p class="text-sm text-gray-500 mb-4"><%= t('uploadFormat') %></p>
+    
+    <input type="file" id="csvFile" accept=".csv" class="mb-4 p-2 border rounded w-full">
+    
+    <div class="flex items-center mb-4">
+      <label class="flex items-center">
+        <input type="checkbox" id="useStrength" class="mr-2" checked>
+        <span class="text-gray-700"><%= t('useStrength') %></span>
+      </label>
+    </div>
+
+    <button id="uploadCsvBtn" data-action="click->index#handleFileUpload" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded">
+      <%= t('uploadButton') %>
+    </button>
+  </div>
+
+  <div id="uploadMessage" class="hidden p-4 rounded"></div>
+</div>
+
+  <!-- Кнопка просмотра загруженных игроков -->
+  <div class="mb-4">
+    <button id="showPlayersBtn" data-action="click->index#showPlayers" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+      <%= t('showPlayers') %>
+    </button>
+  </div>
+
+  <!-- Список загруженных игроков -->
+  <div id="playersList" class="hidden bg-white rounded-lg shadow-lg p-6 mb-8">
+    <h3 class="text-xl font-semibold mb-4"><%= t('loadedPlayers') %></h3>
+    <div id="playersTable"></div>
+  </div>
+
+
+  <!-- Секция управления -->
+  <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+    <div class="flex justify-between items-center">
+      <div>
+        <span id="playerCount" class="text-gray-600"><%= t('loadedCount', count: 0) %></span>
+      </div>
+      <div class="space-x-4">
+        <button id="runDistributionBtn" data-action="click->index#runDistribution" class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded">
+          🎯 <%= t('runDistribution') %>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Секция результатов -->
+  <div id="results" class="bg-white rounded-lg shadow-lg p-6 hidden">
+    <h2 class="text-2xl font-semibold mb-6"><%= t('results') %></h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div>
+        <h3 class="text-xl font-bold mb-4 text-center bg-gray-100 p-2 rounded"><%= t('slot') %> 1</h3>
+        <div id="slot1Results" class="space-y-4"></div>
+      </div>
+      <div>
+        <h3 class="text-xl font-bold mb-4 text-center bg-gray-100 p-2 rounded"><%= t('slot') %> 2</h3>
+        <div id="slot2Results" class="space-y-4"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Секция нераспределенных игроков -->
+  <div id="unassignedPlayers" class="bg-white rounded-lg shadow-lg p-6 mt-8 hidden">
+    <h2 class="text-2xl font-semibold mb-6"><%= t('unassigned') %></h2>
+    <div id="unassignedList" class="space-y-2"></div>
+  </div>
+</div>
+
+<%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>

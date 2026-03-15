@@ -1,10 +1,41 @@
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  # Health check
   get "up" => "rails/health#show", as: :rails_health_check
+  get "health", to: proc { [200, {}, ["OK"]] }
 
-  # Defines the root path route ("/")
-  # root "posts#index"
+  # API routes (без локали)
+  namespace :api do
+    namespace :v1 do
+      # Players
+      post "players/register", to: "players#register"
+      post "players/upload_csv", to: "players#upload_csv"
+      get "players", to: "players#index"
+      get "players/:nickname", to: "players#show"
+      
+      # Distributions
+      post "distributions/run", to: "distributions#run"
+      get "distributions/latest", to: "distributions#latest"
+      
+      # Configs
+      get "configs", to: "configs#index"
+      get "configs/:key", to: "configs#show"
+      put "configs/:key", to: "configs#update"
+      
+      # Building troop types
+      get "building_troop_types", to: "building_troop_types#index"
+      get "building_troop_types/:building", to: "building_troop_types#show"
+      put "building_troop_types/:building", to: "building_troop_types#update"
+    end
+  end
+
+  # Маршруты с поддержкой локали
+  scope "(:locale)", locale: /en|ru|ko|ja/ do
+    # Главная страница
+    root "pages#index"
+    
+    # Публичные страницы (если нужны)
+    get "register", to: "pages#register"
+    get "admin", to: "pages#admin"
+    get "results", to: "pages#results"
+  end
 end

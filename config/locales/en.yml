@@ -1,31 +1,101 @@
-# Files in the config/locales directory are used for internationalization and
-# are automatically loaded by Rails. If you want to use locales other than
-# English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t "hello"
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t("hello") %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more about the API, please read the Rails Internationalization guide
-# at https://guides.rubyonrails.org/i18n.html.
-#
-# Be aware that YAML interprets the following case-insensitive strings as
-# booleans: `true`, `false`, `on`, `off`, `yes`, `no`. Therefore, these strings
-# must be quoted to be interpreted as strings. For example:
-#
-#     en:
-#       "yes": yup
-#       enabled: "ON"
-
 en:
-  hello: "Hello world"
+  # Headers
+  title: '⚔️ Player Distribution System'
+  
+  # Settings
+  distributionSettings: '⚙️ Distribution Settings'
+  maxInTower: 'Max players in tower'
+  maxInTC: 'Max players in TC'
+  reservePerBuilding: 'Reserve per building'
+  
+  # Building types
+  buildingTypes: '🏢 Building Troop Types'
+  auto: '🤖 Auto'
+  saveTypes: 'Save types'
+  
+  # CSV Upload
+  uploadTitle: '📤 Upload Player Data'
+  uploadDescription: 'Upload CSV file exported from Google Sheets'
+  uploadFormat: 'Format: nickname,alliance,troop_type,level,march_size,group_attack,troop_power,slot,wants_captain'
+  chooseFile: 'Choose file'
+  useStrength: 'Use strength calculation (if disabled - distribution by march size only)'
+  uploadButton: 'Upload & Process'
+  
+  # Buttons
+  showPlayers: 'Show loaded players'
+  saveSettings: 'Save settings'
+  runDistribution: '🎯 Run distribution'
+  loadedPlayers: 'Loaded Players'
+  loadedCount:
+    one: 'Loaded: %{count} player'
+    other: 'Loaded: %{count} players'
+  
+  # Results
+  results: '📊 Distribution Results'
+  slot: 'SLOT'
+  captain: '👑 Captain'
+  participants: 'Participants'
+  noParticipants: 'No participants'
+  totalParticipants: 'Total participants troops'
+  captainGA: 'Captain GA'
+  usageGA: 'GA usage'
+  
+  # Unassigned
+  unassigned: '⚠️ Unassigned Players'
+  
+  # Messages
+  success: '✅ Success'
+  error: '❌ Error'
+  fileRequired: 'Select file'
+  playersLoaded:
+    one: '✅ %{count} player loaded'
+    other: '✅ %{count} players loaded'
+  distributionCompleted: '✅ Distribution completed'
+  settingsSaved: '✅ All settings saved'
+  typesSaved: '✅ Building types saved'
+  no_file_chosen: 'No file chosen'
+
+  # Player table
+  nickname: 'Nickname'
+  alliance: 'Alliance'
+  type: 'Type'
+  march: 'March'
+  ga: 'GA'
+  
+  # Statistics
+  analytics: '📊 Player Analytics'
+  total: 'Total players'
+  totalMarch: 'Total march'
+  totalGA: 'Total GA'
+  totalPower: 'Total power'
+  byType: 'By troop type'
+  byLevel: 'By level'
+  bySlot: 'By slot'
+  byCaptain: 'Captain desire'
+  wantCaptain: 'Want to be captain'
+  dontWantCaptain: "Don't want"
+  indifferent: 'Indifferent'
+  
+  # Building names
+  tower_tc: 'Techno Center'
+  tower_north: 'North'
+  tower_south: 'South'
+  tower_west: 'West'
+  tower_east: 'East'
+  
+  # Troop types
+  fighter: 'Fighter'
+  archer: 'Archer'
+  rider: 'Rider'
+  
+  # Slots
+  slot1: 'Slot 1'
+  slot2: 'Slot 2'
+  any: 'Any'
+  
+  # Statuses
+  participant: 'Participant'
+  no_participants: 'No participants'
+  
+  # Additional message keys used in JavaScript
+  no_players: 'No loaded players'
