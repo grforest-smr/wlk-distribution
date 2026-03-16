@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_03_10_132954) do
+ActiveRecord::Schema[8.0].define(version: 2026_03_15_160605) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -19,7 +19,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_10_132954) do
     t.string "troop_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["building"], name: "index_building_troop_types_on_building", unique: true
+    t.integer "slot", default: 1, null: false
+    t.index ["building", "slot"], name: "index_building_troop_types_on_building_and_slot", unique: true
   end
 
   create_table "configs", force: :cascade do |t|

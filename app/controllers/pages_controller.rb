@@ -17,6 +17,10 @@ class PagesController < ApplicationController
     # Страница результатов (больше не используется)
   end
 
+  
+def instructions
+  # Страница с инструкцией
+end
 
   private
 

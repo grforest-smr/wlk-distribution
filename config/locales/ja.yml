@@ -7,8 +7,6 @@ ja:
   maxInTower: 'タワー最大人数'
   maxInTC: 'TC最大人数'
   reservePerBuilding: '建物別予備人数'
-  no_file_chosen: 'ファイルが選択されていません'
-
   
   # Building types
   buildingTypes: '🏢 建物兵種'
@@ -62,6 +60,7 @@ ja:
   type: 'タイプ'
   march: '行軍'
   ga: 'GA'
+  no_players: '読み込んだプレイヤーがいません'
   
   # Statistics
   analytics: '📊 プレイヤー分析'
@@ -97,6 +96,90 @@ ja:
   # Statuses
   participant: '参加者'
   no_participants: '参加者なし'
-  
-  # Additional message keys used in JavaScript
-  no_players: '読み込んだプレイヤーがいません'
+  no_file_chosen: 'ファイルが選択されていません'
+
+    # Reset buttons
+  resetToDefault: 'デフォルトにリセット'
+  confirmReset: '本当によろしいですか？このスロットのすべての手動設定が削除されます。'
+  slot1Reset: 'スロット1を自動配分にリセットしました'
+  slot2Reset: 'スロット2を自動配分にリセットしました'
+    # Instructions
+  instructions:
+    link: '説明書'
+    title: 'ユーザーガイド'
+    overview: 'システム概要'
+    overview_text: 'プレイヤー分配システムは、プレイヤーの特性に基づいて参加者をタワー（テクノセンターおよびタレット）と時間枠に自動的に割り当てます。CSVファイルでプレイヤーデータをアップロードし、パラメータを設定して分配を実行してください。'
+    
+    step1:
+      title: 'データ準備'
+      description: '登録フォームを作成します。行軍サイズ、グループ攻撃、部隊戦力を指定する際は、整数のみを使用してください。1.455.455や1,455,455,455のような区切り文字は使用しないでください。'
+      note_title: '⚠️ 正しい数値形式：'
+      note_text: '区切り文字のない整数のみを使用してください。例：1455455（1.455.455や1,455,455,455は使用しないでください）'
+      form_link_text: '登録フォームの例：'
+      form_link: 'Google Formsテンプレート'
+    
+    step2:
+      title: 'ファイルアップロード'
+      step1: '"プレイヤーデータアップロード"セクションに移動します'
+      step2: 'メインページのフォームを使用してCSVファイルをアップロードします'
+      step3: '"アップロードして処理"ボタンをクリックします'
+      step4: '読み込んだプレイヤーを表示するには"読み込んだプレイヤーを表示"をクリックします'
+      step5: 'エラーが発生した場合、システムにメッセージが表示されます'
+      step6: '分配を開始するには"分配を実行"をクリックします'
+      logic_title: '分配ロジック：'
+      logic1: 'タワーキャプテンは完全な行軍を送信します'
+      logic2: 'プレイヤーは指定された数の部隊を送信します'
+      logic3: 'キャプテンは希望とグループ攻撃に基づいて選択されます'
+      logic4: 'プレイヤーの強さは送信する部隊の比率に影響します'
+    
+    step3:
+      title: '部隊タイプ設定'
+      description: '各スロットに対して、手動で部隊タイプを選択するか、自動分配を選択できます。「リセット」ボタンを使用して自動モードに戻すことができます。'
+    
+    step4:
+      title: '分配実行'
+      description: '「分配を実行」ボタンをクリックして、プレイヤーをタワーに自動的に割り当てます。結果は下に表示されます。'
+    
+    csvFormat: 'CSVファイル形式'
+    csvNote: '最初の行には列ヘッダーが含まれている必要があります。列の順序が重要です！troop_typeの許容値：Fighter、Archer、Rider。slotの許容値：slot1、slot2、any。'
+    
+    table:
+      column: '列'
+      description: '説明'
+      example: '例'
+      nickname: 'プレイヤーニックネーム'
+      alliance: 'アライアンス'
+      troop_type: '部隊タイプ (Fighter/Archer/Rider)'
+      level: 'レベル (T14, T13, T12...)'
+      march_size: '行軍サイズ'
+      group_attack: 'グループ攻撃'
+      troop_power: '部隊戦力'
+      slot: 'スロット (slot1/slot2/any)'
+      wants_captain: 'キャプテン希望 (はい/いいえ/どちらでも)'
+    
+    troopTypes: '部隊タイプ'
+    fighter: '歩兵'
+    archer: '弓兵'
+    rider: '騎兵'
+    
+    slots: 'スロット（シフト）'
+    slot1: '第一シフト'
+    slot2: '第二シフト'
+    any: 'どちらのシフトでも参加可能'
+    
+    buildingSettings: 'スロット別建物設定'
+    buildingDescription: '各シフトで建物に異なる部隊タイプを設定できます。これにより、さまざまなプレイヤー構成に柔軟に対応できます。'
+    slot1Example1: '第一シフトにより多くの騎兵を設定'
+    slot1Example2: '自動分配の場合は自動モードのままに'
+    slot2Example1: '第二シフトにより多くの歩兵を設定'
+    slot2Example2: '「リセット」ボタンで自動設定に戻る'
+    
+    tips: '役立つヒント'
+    tip1: 'CSVファイルに空の行がなく、すべての列が埋まっていることを確認してください'
+    tip2: '自動分配の場合は、設定で部隊タイプを空のままにしてください（「自動」を選択）'
+    tip3: '「キャプテン希望」とマークされたプレイヤーはキャプテン選択時に優先されます'
+    tip4: '分配後、ページ下部の別ブロックで未割当のプレイヤーを確認できます'
+    
+    images:
+      form_export: '登録フォームからデータをエクスポート'
+      sheets_export: 'Google Sheetsからデータをエクスポート'

@@ -53,14 +53,14 @@ en:
   distributionCompleted: '✅ Distribution completed'
   settingsSaved: '✅ All settings saved'
   typesSaved: '✅ Building types saved'
-  no_file_chosen: 'No file chosen'
-
+  
   # Player table
   nickname: 'Nickname'
   alliance: 'Alliance'
   type: 'Type'
   march: 'March'
   ga: 'GA'
+  no_players: 'No loaded players'
   
   # Statistics
   analytics: '📊 Player Analytics'
@@ -96,6 +96,90 @@ en:
   # Statuses
   participant: 'Participant'
   no_participants: 'No participants'
-  
-  # Additional message keys used in JavaScript
-  no_players: 'No loaded players'
+  no_file_chosen: 'No file chosen'
+
+    # Reset buttons
+  resetToDefault: 'Reset to default'
+  confirmReset: 'Are you sure? All manual settings for this slot will be removed.'
+  slot1Reset: 'Slot 1 reset to auto distribution'
+  slot2Reset: 'Slot 2 reset to auto distribution'
+    # Instructions
+  instructions:
+    link: 'Instructions'
+    title: 'User Guide'
+    overview: 'System Overview'
+    overview_text: 'The player distribution system helps automatically allocate participants to towers (techno-center and turrets) and time slots based on their characteristics. Simply upload a CSV file with player data, configure the parameters, and run the distribution.'
+    
+    step1:
+      title: 'Data Preparation'
+      description: 'Create a registration form. When specifying march size, group attack, and troop power, use only whole numbers. Avoid separators like 1.455.455 or 1,455,455,455.'
+      note_title: '⚠️ Correct number format:'
+      note_text: 'Use only whole numbers without separators. For example: 1455455, not 1.455.455 or 1,455,455,455.'
+      form_link_text: 'Sample registration form:'
+      form_link: 'Google Forms template'
+    
+    step2:
+      title: 'File Upload'
+      step1: 'Go to the "Upload Player Data" section'
+      step2: 'Upload the CSV file using the form on the main page'
+      step3: 'Click the "Upload & Process" button'
+      step4: 'To view loaded players, click "Show loaded players"'
+      step5: 'If an error occurs, the system will display a message'
+      step6: 'To start distribution, click "Run distribution"'
+      logic_title: 'Distribution Logic:'
+      logic1: 'The tower captain sends full march'
+      logic2: 'Players send the specified amount of troops'
+      logic3: 'Captain is selected based on preferences and group attack'
+      logic4: 'Player strength affects the proportion of troops sent'
+    
+    step3:
+      title: 'Troop Type Settings'
+      description: 'For each slot, you can manually select troop types or leave automatic distribution. Use the "Reset" buttons to return to auto mode.'
+    
+    step4:
+      title: 'Run Distribution'
+      description: 'Click the "Run distribution" button to automatically distribute players across towers. The results will be displayed below.'
+    
+    csvFormat: 'CSV File Format'
+    csvNote: 'The first row must contain column headers. Column order is important! Allowed values for troop_type: Fighter, Archer, Rider. For slot: slot1, slot2, any.'
+    
+    table:
+      column: 'Column'
+      description: 'Description'
+      example: 'Example'
+      nickname: 'Player nickname'
+      alliance: 'Alliance'
+      troop_type: 'Troop type (Fighter/Archer/Rider)'
+      level: 'Level (T14, T13, T12...)'
+      march_size: 'March size'
+      group_attack: 'Group attack'
+      troop_power: 'Troop power'
+      slot: 'Slot (slot1/slot2/any)'
+      wants_captain: 'Wants to be captain (Yes/No/Any)'
+    
+    troopTypes: 'Troop Types'
+    fighter: 'Fighter'
+    archer: 'Archer'
+    rider: 'Rider'
+    
+    slots: 'Slots (Shifts)'
+    slot1: 'First shift'
+    slot2: 'Second shift'
+    any: 'Can participate in any shift'
+    
+    buildingSettings: 'Building Settings by Slot'
+    buildingDescription: 'You can set different troop types for buildings in each shift. This allows flexible distribution for different player compositions.'
+    slot1Example1: 'Set more Riders in the first shift'
+    slot1Example2: 'Or leave auto mode for automatic distribution'
+    slot2Example1: 'Set more Fighters in the second shift'
+    slot2Example2: 'The "Reset" button returns settings to automatic'
+    
+    tips: 'Useful Tips'
+    tip1: 'Check that the CSV file has no empty rows and all columns are filled'
+    tip2: 'For automatic distribution, leave troop types empty in settings (select "Auto")'
+    tip3: 'Players marked "Want to be captain" get priority when selecting captains'
+    tip4: 'After distribution, you can see unassigned players in a separate block at the bottom of the page'
+    
+    images:
+      form_export: 'Export data from registration form'
+      sheets_export: 'Export data from Google Sheets'

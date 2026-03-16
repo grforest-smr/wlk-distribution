@@ -1,0 +1,204 @@
+<div class="max-w-4xl mx-auto p-6">
+  <!-- Заголовок и навигация -->
+  <div class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl font-bold"><%= t('instructions.title') %></h1>
+    <%= link_to t('backToMain'), root_path, class: "text-blue-500 hover:text-blue-700" %>
+  </div>
+
+  <!-- Переключатель языков -->
+  <div class="flex justify-end space-x-2 mb-4">
+    <%= link_to 'Русский', url_for(locale: :ru), class: 'px-3 py-1 border rounded hover:bg-gray-100 text-sm' %>
+    <%= link_to 'English', url_for(locale: :en), class: 'px-3 py-1 border rounded hover:bg-gray-100 text-sm' %>
+    <%= link_to '한국어', url_for(locale: :ko), class: 'px-3 py-1 border rounded hover:bg-gray-100 text-sm' %>
+    <%= link_to '日本語', url_for(locale: :ja), class: 'px-3 py-1 border rounded hover:bg-gray-100 text-sm' %>
+  </div>
+
+  <!-- Обзор системы -->
+  <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+    <h2 class="text-2xl font-semibold mb-4">📋 <%= t('instructions.overview') %></h2>
+    <p class="text-gray-700"><%= t('instructions.overview_text') %></p>
+  </div>
+
+  <!-- Подготовка данных -->
+  <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+    <h2 class="text-2xl font-semibold mb-4">1. <%= t('instructions.step1.title') %></h2>
+    
+    <div class="space-y-4">
+      <p class="text-gray-700"><%= t('instructions.step1.description') %></p>
+      
+      <div class="bg-blue-50 border-l-4 border-blue-500 p-4">
+        <p class="text-sm font-medium text-blue-800"><%= t('instructions.step1.note_title') %></p>
+        <p class="text-sm text-blue-700"><%= t('instructions.step1.note_text') %></p>
+      </div>
+
+      <p class="text-gray-700"><%= t('instructions.step1.form_link_text') %> 
+        <%= link_to t('instructions.step1.form_link'), 
+            "https://docs.google.com/forms/d/e/1FAIpQLSf5O24PjlX-31OPc7THxy8fC3F5WL37tEsXeWUtFJVSs9RMlA/viewform?usp=dialog",
+            class: "text-blue-500 hover:underline", target: "_blank" %>
+      </p>
+
+      <!-- Изображение 1: Экспорт из формы -->
+      <div class="my-6">
+        <%= image_tag 'instructions/google-form-export.png', 
+              class: 'rounded-lg shadow-lg mx-auto', 
+              alt: t('instructions.images.form_export'),
+              style: 'max-width: 100%; height: auto;' %>
+        <p class="text-sm text-gray-600 mt-2 text-center italic">
+          <%= t('instructions.images.form_export') %>
+        </p>
+      </div>
+
+      <!-- Изображение 2: Экспорт из Google Sheets -->
+      <div class="my-6">
+        <%= image_tag 'instructions/google-sheets-export.png', 
+              class: 'rounded-lg shadow-lg mx-auto', 
+              alt: t('instructions.images.sheets_export'),
+              style: 'max-width: 100%; height: auto;' %>
+        <p class="text-sm text-gray-600 mt-2 text-center italic">
+          <%= t('instructions.images.sheets_export') %>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Загрузка файла -->
+  <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+    <h2 class="text-2xl font-semibold mb-4">2. <%= t('instructions.step2.title') %></h2>
+    
+    <div class="space-y-4">
+      <ul class="list-disc list-inside space-y-2 text-gray-700">
+        <li><%= t('instructions.step2.step1') %></li>
+        <li><%= t('instructions.step2.step2') %></li>
+        <li><%= t('instructions.step2.step3') %></li>
+        <li><%= t('instructions.step2.step4') %></li>
+        <li><%= t('instructions.step2.step5') %></li>
+        <li><%= t('instructions.step2.step6') %></li>
+      </ul>
+
+      <!-- Блок с логикой распределения -->
+      <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 mt-4">
+        <h3 class="font-bold text-yellow-800 mb-2">⚡ <%= t('instructions.step2.logic_title') %></h3>
+        <ul class="list-disc list-inside space-y-1 text-sm text-yellow-800">
+          <li><%= t('instructions.step2.logic1') %></li>
+          <li><%= t('instructions.step2.logic2') %></li>
+          <li><%= t('instructions.step2.logic3') %></li>
+          <li><%= t('instructions.step2.logic4') %></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Настройка типов войск -->
+  <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+    <h2 class="text-2xl font-semibold mb-4">3. <%= t('instructions.step3.title') %></h2>
+    <p class="text-gray-700"><%= t('instructions.step3.description') %></p>
+  </div>
+
+  <!-- Запуск распределения -->
+  <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+    <h2 class="text-2xl font-semibold mb-4">4. <%= t('instructions.step4.title') %></h2>
+    <p class="text-gray-700"><%= t('instructions.step4.description') %></p>
+  </div>
+
+  <!-- Формат CSV -->
+  <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+    <h2 class="text-2xl font-semibold mb-4">📄 <%= t('instructions.csvFormat') %></h2>
+    
+    <!-- Пример CSV -->
+    <div class="bg-gray-100 p-4 rounded font-mono text-sm overflow-x-auto mb-4">
+      nickname,alliance,troop_type,level,march_size,group_attack,troop_power,slot,wants_captain<br>
+      Player1,Alliance1,Fighter,T14,500000,1000000,5000000,slot1,Да<br>
+      Player2,Alliance2,Archer,T13,300000,800000,3000000,slot2,Нет<br>
+      Player3,Alliance3,Rider,T12,400000,900000,4000000,any,Не важно
+    </div>
+    
+    <p class="text-sm text-gray-600 mb-4"><%= t('instructions.csvNote') %></p>
+    
+    <!-- Таблица с описанием колонок -->
+    <div class="overflow-x-auto">
+      <table class="min-w-full border">
+        <thead>
+          <tr class="bg-gray-100">
+            <th class="border p-2 text-left"><%= t('instructions.table.column') %></th>
+            <th class="border p-2 text-left"><%= t('instructions.table.description') %></th>
+            <th class="border p-2 text-left"><%= t('instructions.table.example') %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% [
+            ['nickname', 'instructions.table.nickname', 'Player1'],
+            ['alliance', 'instructions.table.alliance', 'Alliance1'],
+            ['troop_type', 'instructions.table.troop_type', 'Fighter'],
+            ['level', 'instructions.table.level', 'T14'],
+            ['march_size', 'instructions.table.march_size', '500000'],
+            ['group_attack', 'instructions.table.group_attack', '1000000'],
+            ['troop_power', 'instructions.table.troop_power', '5000000'],
+            ['slot', 'instructions.table.slot', 'slot1'],
+            ['wants_captain', 'instructions.table.wants_captain', 'Да']
+          ].each do |col, desc, example| %>
+            <tr>
+              <td class="border p-2 font-mono text-sm"><%= col %></td>
+              <td class="border p-2"><%= t(desc) %></td>
+              <td class="border p-2 font-mono text-sm"><%= example %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Типы войск и слоты -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+    <div class="bg-white rounded-lg shadow-lg p-6">
+      <h3 class="text-xl font-semibold mb-3">⚔️ <%= t('instructions.troopTypes') %></h3>
+      <ul class="space-y-2">
+        <li><span class="font-bold">Fighter:</span> <%= t('instructions.fighter') %></li>
+        <li><span class="font-bold">Archer:</span> <%= t('instructions.archer') %></li>
+        <li><span class="font-bold">Rider:</span> <%= t('instructions.rider') %></li>
+      </ul>
+    </div>
+    
+    <div class="bg-white rounded-lg shadow-lg p-6">
+      <h3 class="text-xl font-semibold mb-3">🎯 <%= t('instructions.slots') %></h3>
+      <ul class="space-y-2">
+        <li><span class="font-bold">Slot 1:</span> <%= t('instructions.slot1') %></li>
+        <li><span class="font-bold">Slot 2:</span> <%= t('instructions.slot2') %></li>
+        <li><span class="font-bold">Any:</span> <%= t('instructions.any') %></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Настройки зданий по слотам -->
+  <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+    <h2 class="text-2xl font-semibold mb-4">🏢 <%= t('instructions.buildingSettings') %></h2>
+    <p class="text-gray-700 mb-4"><%= t('instructions.buildingDescription') %></p>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="border rounded p-4">
+        <h4 class="font-bold mb-2"><%= t('slot1') %></h4>
+        <ul class="list-disc list-inside text-sm text-gray-600">
+          <li><%= t('instructions.slot1Example1') %></li>
+          <li><%= t('instructions.slot1Example2') %></li>
+        </ul>
+      </div>
+      <div class="border rounded p-4">
+        <h4 class="font-bold mb-2"><%= t('slot2') %></h4>
+        <ul class="list-disc list-inside text-sm text-gray-600">
+          <li><%= t('instructions.slot2Example1') %></li>
+          <li><%= t('instructions.slot2Example2') %></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Полезные советы -->
+  <div class="bg-blue-50 rounded-lg shadow-lg p-6">
+    <h2 class="text-2xl font-semibold mb-4">💡 <%= t('instructions.tips') %></h2>
+    <ul class="list-disc list-inside space-y-2 text-gray-700">
+      <li><%= t('instructions.tip1') %></li>
+      <li><%= t('instructions.tip2') %></li>
+      <li><%= t('instructions.tip3') %></li>
+      <li><%= t('instructions.tip4') %></li>
+    </ul>
+  </div>
+</div>

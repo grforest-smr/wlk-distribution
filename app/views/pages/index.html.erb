@@ -33,7 +33,7 @@
        slot: t('slot'),
        unassigned: t('unassigned'),
        loadedPlayers: t('loadedPlayers'),
-       loadedCount: t('loadedCount', count: 0),
+       loadedCount: t('loadedCount'),
        fileRequired: t('fileRequired'),
        playersLoaded: t('playersLoaded'),
        distributionCompleted: t('distributionCompleted'),
@@ -41,18 +41,26 @@
        typesSaved: t('typesSaved'),
        error: t('error'),
        no_file_chosen: t('no_file_chosen'),
-       chooseFile: t('chooseFile')
+       chooseFile: t('chooseFile'),
+       resetToDefault: t('resetToDefault'),
+       confirmReset: t('confirmReset'),
+       slot1Reset: t('slot1Reset'),
+       slot2Reset: t('slot2Reset')
      }.to_json %>'>
   
   <h1 class="text-3xl font-bold text-center mb-8"><%= t('title') %></h1>
   
   <!-- Переключатель языков -->
-  <div class="flex justify-end space-x-2 mb-4">
-    <%= link_to 'Русский', url_for(locale: :ru), class: 'px-3 py-1 border rounded hover:bg-gray-100' %>
-    <%= link_to 'English', url_for(locale: :en), class: 'px-3 py-1 border rounded hover:bg-gray-100' %>
-    <%= link_to '한국어', url_for(locale: :ko), class: 'px-3 py-1 border rounded hover:bg-gray-100' %>
-    <%= link_to '日本語', url_for(locale: :ja), class: 'px-3 py-1 border rounded hover:bg-gray-100' %>
+<div class="flex justify-between items-center mb-4">
+  <div class="flex space-x-2">
+<%= link_to '📖 ' + t('instructions.link'), url_for(controller: 'pages', action: 'instructions'), class: "text-blue-500 hover:text-blue-700 text-sm font-medium" %>  </div>
+  <div class="flex space-x-2">
+    <%= link_to 'Русский', url_for(locale: :ru), class: 'px-3 py-1 border rounded hover:bg-gray-100 text-sm' %>
+    <%= link_to 'English', url_for(locale: :en), class: 'px-3 py-1 border rounded hover:bg-gray-100 text-sm' %>
+    <%= link_to '한국어', url_for(locale: :ko), class: 'px-3 py-1 border rounded hover:bg-gray-100 text-sm' %>
+    <%= link_to '日本語', url_for(locale: :ja), class: 'px-3 py-1 border rounded hover:bg-gray-100 text-sm' %>
   </div>
+</div>
 
   <!-- Секция настроек -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
@@ -84,45 +92,60 @@
       </div>
     </div>
 
-    <!-- Типы войск для зданий -->
-    <div class="bg-white rounded-lg shadow-lg p-6">
-      <h2 class="text-2xl font-semibold mb-4"><%= t('buildingTypes') %></h2>
+    <!-- Типы войск для зданий - разделены по слотам -->
+    <div class="space-y-6">
+            <!-- Слот 1 -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+              <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-semibold"><%= t('slot1') %> – <%= t('buildingTypes') %></h2>
+                <button id="resetSlot1Btn" data-action="click->index#resetSlot1" class="bg-gray-500 hover:bg-gray-600 text-white text-sm font-bold py-1 px-3 rounded">
+                  🔄 <%= t('resetToDefault') %>
+                </button>
+              </div>
+              <div class="space-y-4" id="buildingTypesSlot1"></div>
+            </div>
+            
+            <!-- Слот 2 -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+              <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-semibold"><%= t('slot2') %> – <%= t('buildingTypes') %></h2>
+                <button id="resetSlot2Btn" data-action="click->index#resetSlot2" class="bg-gray-500 hover:bg-gray-600 text-white text-sm font-bold py-1 px-3 rounded">
+                  🔄 <%= t('resetToDefault') %>
+                </button>
+              </div>
+              <div class="space-y-4" id="buildingTypesSlot2"></div>
+            </div>
       
-      <div class="space-y-4" id="buildingTypes">
-        <!-- Заполняется JavaScript -->
+      <!-- Кнопка сохранения типов (одна на оба слота) -->
+          <button id="saveTypesBtn" data-action="click->index#saveBuildingTypes" class="w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+            <%= t('saveTypes') %>
+          </button>
+        </div>
+
+  <!-- Секция загрузки CSV -->
+  <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+    <h2 class="text-2xl font-semibold mb-4"><%= t('uploadTitle') %></h2>
+    
+    <div class="mb-4">
+      <p class="text-gray-600 mb-2"><%= t('uploadDescription') %></p>
+      <p class="text-sm text-gray-500 mb-4"><%= t('uploadFormat') %></p>
+      
+      <input type="file" id="csvFile" accept=".csv" class="mb-4 p-2 border rounded w-full">
+      
+      <div class="flex items-center mb-4">
+        <label class="flex items-center">
+          <input type="checkbox" id="useStrength" class="mr-2" checked>
+          <span class="text-gray-700"><%= t('useStrength') %></span>
+        </label>
       </div>
-      
-      <button id="saveTypesBtn" data-action="click->index#saveBuildingTypes" class="mt-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-        <%= t('saveTypes') %>
+
+      <button id="uploadCsvBtn" data-action="click->index#handleFileUpload" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded">
+        <%= t('uploadButton') %>
       </button>
     </div>
+
+    <div id="uploadMessage" class="hidden p-4 rounded"></div>
   </div>
-
-  <!-- Секция загрузки CSV (кастомный файловый инпут) -->
-  <!-- Секция загрузки CSV -->
-<div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-  <h2 class="text-2xl font-semibold mb-4"><%= t('uploadTitle') %></h2>
-  
-  <div class="mb-4">
-    <p class="text-gray-600 mb-2"><%= t('uploadDescription') %></p>
-    <p class="text-sm text-gray-500 mb-4"><%= t('uploadFormat') %></p>
-    
-    <input type="file" id="csvFile" accept=".csv" class="mb-4 p-2 border rounded w-full">
-    
-    <div class="flex items-center mb-4">
-      <label class="flex items-center">
-        <input type="checkbox" id="useStrength" class="mr-2" checked>
-        <span class="text-gray-700"><%= t('useStrength') %></span>
-      </label>
-    </div>
-
-    <button id="uploadCsvBtn" data-action="click->index#handleFileUpload" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded">
-      <%= t('uploadButton') %>
-    </button>
-  </div>
-
-  <div id="uploadMessage" class="hidden p-4 rounded"></div>
-</div>
 
   <!-- Кнопка просмотра загруженных игроков -->
   <div class="mb-4">
@@ -136,7 +159,6 @@
     <h3 class="text-xl font-semibold mb-4"><%= t('loadedPlayers') %></h3>
     <div id="playersTable"></div>
   </div>
-
 
   <!-- Секция управления -->
   <div class="bg-white rounded-lg shadow-lg p-6 mb-8">

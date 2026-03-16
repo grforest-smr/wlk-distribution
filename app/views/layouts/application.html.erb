@@ -10,9 +10,8 @@
   <%= yield %>
   
   <script>
-    console.log('Скрипт в layout загружен');
-    
-    // Функция для показа сообщений
+    console.log('Script loaded');
+
     function showMessage(text, type) {
       const msg = document.getElementById('uploadMessage');
       if (msg) {
@@ -21,41 +20,26 @@
           type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
         }`;
         msg.classList.remove('hidden');
-
-        setTimeout(() => {
-          msg.classList.add('hidden');
-        }, 5000);
-      } else {
-        console.log('Message element not found');
+        setTimeout(() => msg.classList.add('hidden'), 5000);
       }
     }
-    
-    // Функция загрузки настроек
+
     async function loadSettings() {
-      console.log('Загрузка настроек...');
-      
       try {
         const response = await fetch('/api/v1/configs');
         const result = await response.json();
-        
         if (result.status === 'success') {
           result.data.forEach(config => {
             const input = document.getElementById(config.key);
-            if (input) {
-              input.value = config.value;
-              console.log(`Установлено ${config.key} = ${config.value}`);
-            }
+            if (input) input.value = config.value;
           });
         }
       } catch (error) {
-        console.error('Ошибка загрузки настроек:', error);
+        console.error('Error loading settings:', error);
       }
     }
-    
-    // Функция загрузки типов зданий
+
     async function loadBuildingTypes() {
-      console.log('Загрузка типов зданий...');
-      
       try {
         const response = await fetch('/api/v1/building_troop_types');
         const result = await response.json();
@@ -68,40 +52,36 @@
           { key: 'tower_east', name: 'east' }
         ];
         
-        const container = document.getElementById('buildingTypes');
-        if (!container) {
-          console.log('Контейнер buildingTypes не найден');
-          return;
-        }
+        const translations = JSON.parse(document.querySelector('[data-controller="index"]').dataset.translations);
         
-        container.innerHTML = '';
+        const containerSlot1 = document.getElementById('buildingTypesSlot1');
+        const containerSlot2 = document.getElementById('buildingTypesSlot2');
         
-        const currentTypes = {};
+        if (!containerSlot1 || !containerSlot2) return;
+        
+        containerSlot1.innerHTML = '';
+        containerSlot2.innerHTML = '';
+        
+        const typesBySlot = { 1: {}, 2: {} };
         if (result.status === 'success') {
           result.data.forEach(item => {
-            currentTypes[item.building] = item.troop_type;
+            typesBySlot[item.slot][item.building] = item.troop_type;
           });
         }
         
-        // Получаем переводы
-        const translations = JSON.parse(document.querySelector('[data-controller="index"]').dataset.translations);
-        
-        allBuildings.forEach(building => {
-          const currentValue = currentTypes[building.name] || '';
-          
+        function createBuildingSelect(building, slot, currentValue) {
           const div = document.createElement('div');
           div.className = 'flex items-center mb-2';
           
-          // Название здания
           const label = document.createElement('span');
           label.className = 'w-48 font-medium';
           label.textContent = `${translations[building.key]}:`;
           div.appendChild(label);
           
-          // Выпадающий список
           const select = document.createElement('select');
           select.dataset.building = building.name;
-          select.className = 'building-type-select flex-1 p-2 border rounded';
+          select.dataset.slot = slot;
+          select.className = `building-type-select flex-1 p-2 border rounded`;
           
           const options = [
             { value: '', text: translations['auto'] },
@@ -119,170 +99,106 @@
           });
           
           div.appendChild(select);
-          container.appendChild(div);
+          return div;
+        }
+        
+        allBuildings.forEach(building => {
+          containerSlot1.appendChild(createBuildingSelect(building, 1, typesBySlot[1][building.name] || ''));
         });
         
-        console.log('Типы зданий загружены');
+        allBuildings.forEach(building => {
+          containerSlot2.appendChild(createBuildingSelect(building, 2, typesBySlot[2][building.name] || ''));
+        });
+        
       } catch (error) {
-        console.error('Ошибка загрузки типов зданий:', error);
+        console.error('Error loading building types:', error);
       }
     }
-    
+
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('DOM загружен');
+      console.log('DOM loaded');
       
-      // Получаем переводы для текущего языка
       const translations = JSON.parse(document.querySelector('[data-controller="index"]').dataset.translations);
       
-      // Функция перевода с поддержкой параметров
-                const t = (key, params = {}) => {
-                  let value = translations[key];
-                  
-                  // Если значение — объект (для плюрализации)
-                  if (typeof value === 'object' && value !== null) {
-                    const count = params.count;
-                    if (count !== undefined) {
-                      // Определяем plural форму для русского языка
-                      let pluralKey = 'other';
-                      if (count % 10 === 1 && count % 100 !== 11) {
-                        pluralKey = 'one';
-                      } else if ([2,3,4].includes(count % 10) && ![12,13,14].includes(count % 100)) {
-                        pluralKey = 'few';
-                      } else if (count % 10 === 0 || [5,6,7,8,9].includes(count % 10) || [11,12,13,14].includes(count % 100)) {
-                        pluralKey = 'many';
-                      }
-                      value = value[pluralKey] || value['other'] || key;
-                    } else {
-                      // Если нет count, берём 'other' или первый попавшийся
-                      value = value['other'] || Object.values(value)[0] || key;
-                    }
-                  }
-                  
-                  // Если значение не строка (например, не нашли перевод) – возвращаем ключ
-                  if (typeof value !== 'string') {
-                    return key;
-                  }
-                  
-                  // Заменяем параметры {count} или %{count}
-                  Object.keys(params).forEach(param => {
-                    value = value.replace(`{${param}}`, params[param]);
-                    value = value.replace(`%{${param}}`, params[param]);
-                  });
-                  
-                  return value;
-                };
+      const t = (key, params = {}) => {
+        let value = translations[key];
+        
+        // Handle pluralization objects
+        if (typeof value === 'object' && value !== null) {
+          const count = params.count;
+          if (count !== undefined) {
+            let pluralKey = 'other';
+            if (count % 10 === 1 && count % 100 !== 11) pluralKey = 'one';
+            else if ([2,3,4].includes(count % 10) && ![12,13,14].includes(count % 100)) pluralKey = 'few';
+            else if (count % 10 === 0 || [5,6,7,8,9].includes(count % 10) || [11,12,13,14].includes(count % 100)) pluralKey = 'many';
+            value = value[pluralKey] || value['other'] || key;
+          } else {
+            value = value['other'] || Object.values(value)[0] || key;
+          }
+        }
+        
+        if (typeof value !== 'string') return key;
+        
+        Object.keys(params).forEach(param => {
+          value = value.replace(`{${param}}`, params[param]);
+          value = value.replace(`%{${param}}`, params[param]);
+        });
+        
+        return value;
+      };
       
-      // Загружаем настройки
       loadSettings();
-      
-      // Загружаем типы зданий
       loadBuildingTypes();
       
-      // ===== Функция отображения статистики =====
-      function displayPlayerStats(players) {
-        const statsContainer = document.getElementById('playerStats');
-        if (!statsContainer) return;
+      // ===== Функции сброса (теперь внутри DOMContentLoaded) =====
+      async function resetSlot1() {
+        if (!confirm(t('confirmReset'))) return;
         
-        const total = players.length;
-        
-        // Подсчет по типам
-        const typeCount = { fighter:0, archer:0, rider:0 };
-        players.forEach(p => {
-          if (p.troop_type === 'fighter') typeCount.fighter++;
-          else if (p.troop_type === 'archer') typeCount.archer++;
-          else if (p.troop_type === 'rider') typeCount.rider++;
-        });
-        
-        // Подсчет по уровням
-        const levelCount = {};
-        players.forEach(p => {
-          const lvl = p.level;
-          levelCount[lvl] = (levelCount[lvl] || 0) + 1;
-        });
-        
-        // Сортировка уровней по числовому значению (убывание)
-        const sortedLevels = Object.keys(levelCount).sort((a, b) => {
-          const numA = parseInt(a.replace('T','')) || 0;
-          const numB = parseInt(b.replace('T','')) || 0;
-          return numB - numA;
-        });
-        
-        // Подсчет по слотам
-        const slotCount = { slot1:0, slot2:0, any:0 };
-        players.forEach(p => {
-          if (p.slot === 'slot1') slotCount.slot1++;
-          else if (p.slot === 'slot2') slotCount.slot2++;
-          else slotCount.any++;
-        });
-        
-        // Подсчет желания капитаном
-        const captainDesire = { Да:0, Нет:0, 'Не важно':0 };
-        players.forEach(p => {
-          const desire = p.wants_captain || 'Не важно';
-          captainDesire[desire] = (captainDesire[desire] || 0) + 1;
-        });
-        
-        // Формируем HTML
-        let html = `
-          <h2 class="text-2xl font-semibold mb-4">${t('analytics')}</h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <h3 class="font-bold mb-2">${t('total')}</h3>
-              <table class="w-full">
-                <tr><td class="py-1">${t('total')}:</td><td class="text-right font-bold">${total}</td></tr>
-              </table>
-            </div>
-            <div>
-              <h3 class="font-bold mb-2">${t('byType')}</h3>
-              <table class="w-full">
-                <tr><td class="py-1">${t('fighter')}:</td><td class="text-right font-bold">${typeCount.fighter} (${((typeCount.fighter/total)*100).toFixed(1)}%)</td></tr>
-                <tr><td class="py-1">${t('archer')}:</td><td class="text-right font-bold">${typeCount.archer} (${((typeCount.archer/total)*100).toFixed(1)}%)</td></tr>
-                <tr><td class="py-1">${t('rider')}:</td><td class="text-right font-bold">${typeCount.rider} (${((typeCount.rider/total)*100).toFixed(1)}%)</td></tr>
-              </table>
-            </div>
-            <div>
-              <h3 class="font-bold mb-2">${t('byLevel')}</h3>
-              <table class="w-full">
-        `;
-        
-        // Показываем топ-5 уровней
-        const topLevels = sortedLevels.slice(0,5);
-        topLevels.forEach(level => {
-          const count = levelCount[level];
-          html += `<tr><td class="py-1">${level}:</td><td class="text-right font-bold">${count} (${((count/total)*100).toFixed(1)}%)</td></tr>`;
-        });
-        
-        html += `
-              </table>
-            </div>
-            <div>
-              <h3 class="font-bold mb-2">${t('bySlot')}</h3>
-              <table class="w-full">
-                <tr><td class="py-1">${t('slot1')}:</td><td class="text-right font-bold">${slotCount.slot1}</td></tr>
-                <tr><td class="py-1">${t('slot2')}:</td><td class="text-right font-bold">${slotCount.slot2}</td></tr>
-                <tr><td class="py-1">${t('any')}:</td><td class="text-right font-bold">${slotCount.any}</td></tr>
-              </table>
-            </div>
-            <div class="md:col-span-2">
-              <h3 class="font-bold mb-2">${t('byCaptain')}</h3>
-              <table class="w-full">
-                <tr><td class="py-1">${t('wantCaptain')}:</td><td class="text-right font-bold">${captainDesire['Да'] || 0}</td></tr>
-                <tr><td class="py-1">${t('dontWantCaptain')}:</td><td class="text-right font-bold">${captainDesire['Нет'] || 0}</td></tr>
-                <tr><td class="py-1">${t('indifferent')}:</td><td class="text-right font-bold">${captainDesire['Не важно'] || 0}</td></tr>
-              </table>
-            </div>
-          </div>
-        `;
-        
-        statsContainer.innerHTML = html;
-        statsContainer.classList.remove('hidden');
+        try {
+          const allBuildings = ['tc', 'north', 'south', 'west', 'east'];
+          
+          for (const building of allBuildings) {
+            await fetch(`/api/v1/building_troop_types/1/${encodeURIComponent(building)}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ troop_type: '' })
+            });
+          }
+          
+          showMessage(t('slot1Reset'), 'success');
+          loadBuildingTypes();
+        } catch (error) {
+          console.error('Error resetting slot 1:', error);
+          showMessage(t('error'), 'error');
+        }
       }
-      // ===== Конец функции статистики =====
       
-      // Загрузка CSV
+      async function resetSlot2() {
+        if (!confirm(t('confirmReset'))) return;
+        
+        try {
+          const allBuildings = ['tc', 'north', 'south', 'west', 'east'];
+          
+          for (const building of allBuildings) {
+            await fetch(`/api/v1/building_troop_types/2/${encodeURIComponent(building)}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ troop_type: '' })
+            });
+          }
+          
+          showMessage(t('slot2Reset'), 'success');
+          loadBuildingTypes();
+        } catch (error) {
+          console.error('Error resetting slot 2:', error);
+          showMessage(t('error'), 'error');
+        }
+      }
+      // ===== Конец функций сброса =====
+      
+      // Upload CSV
       const uploadBtn = document.getElementById('uploadCsvBtn');
       if (uploadBtn) {
-        console.log('Кнопка загрузки найдена по ID');
         uploadBtn.addEventListener('click', async function(event) {
           event.preventDefault();
           
@@ -293,7 +209,6 @@
           }
 
           const useStrength = document.getElementById('useStrength').checked;
-          
           const formData = new FormData();
           formData.append('file', file);
           formData.append('use_strength', useStrength);
@@ -309,24 +224,17 @@
             if (result.status === 'success') {
               showMessage(t('playersLoaded', { count: result.count }), 'success');
               
-              // ===== ИСПРАВЛЕННЫЙ СЧЁТЧИК =====
               const countElement = document.getElementById('playerCount');
               if (countElement) {
-                // Получаем шаблон из переводов и заменяем число
-                let template = translations['loadedCount']; // например "Загружено: 0 игроков"
-                template = template.replace(/\d+/, result.count); // заменяем первое число
-                countElement.textContent = template;
+                countElement.textContent = t('loadedCount', { count: result.count });
               }
-              // =================================
               
-              // Отображаем статистику, если есть игроки
               if (result.players && result.players.length > 0) {
                 displayPlayerStats(result.players);
               } else {
                 const statsContainer = document.getElementById('playerStats');
                 if (statsContainer) statsContainer.classList.add('hidden');
               }
-              
             } else {
               showMessage(`❌ ${result.message}`, 'error');
             }
@@ -335,14 +243,11 @@
             console.error(error);
           }
         });
-      } else {
-        console.log('Кнопка загрузки НЕ найдена');
       }
       
-      // Показать игроков
+      // Show players
       const showPlayersBtn = document.getElementById('showPlayersBtn');
       if (showPlayersBtn) {
-        console.log('Кнопка показа игроков найдена по ID');
         showPlayersBtn.addEventListener('click', async function(event) {
           event.preventDefault();
           
@@ -385,7 +290,7 @@
         });
       }
       
-      // Сохранение настроек
+      // Save settings
       const saveSettingsBtn = document.getElementById('saveSettingsBtn');
       if (saveSettingsBtn) {
         saveSettingsBtn.addEventListener('click', async function(event) {
@@ -399,30 +304,20 @@
 
           try {
             for (const setting of settings) {
-              const response = await fetch(`/api/v1/configs/${setting.key}`, {
+              await fetch(`/api/v1/configs/${setting.key}`, {
                 method: 'PUT',
-                headers: { 
-                  'Content-Type': 'application/json',
-                  'Accept': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ value: setting.value })
               });
-              
-              if (!response.ok) {
-                const errorData = await response.json();
-                console.error('Ошибка:', errorData);
-                throw new Error(`HTTP error! status: ${response.status}`);
-              }
             }
             showMessage(t('settingsSaved'), 'success');
           } catch (error) {
-            console.error('Ошибка сохранения:', error);
             showMessage(t('error'), 'error');
           }
         });
       }
       
-      // Сохранение типов зданий
+      // Save building types
       const saveTypesBtn = document.getElementById('saveTypesBtn');
       if (saveTypesBtn) {
         saveTypesBtn.addEventListener('click', async function(event) {
@@ -433,36 +328,33 @@
           try {
             for (const select of selects) {
               const building = select.dataset.building;
+              const slot = select.dataset.slot;
               const troop_type = select.value;
               
-              const response = await fetch(`/api/v1/building_troop_types/${encodeURIComponent(building)}`, {
+              const response = await fetch(`/api/v1/building_troop_types/${slot}/${encodeURIComponent(building)}`, {
                 method: 'PUT',
-                headers: { 
-                  'Content-Type': 'application/json',
-                  'Accept': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ troop_type })
               });
               
               if (!response.ok) {
                 const errorData = await response.json();
-                console.error('Ошибка:', errorData);
+                console.error('Error:', errorData);
                 throw new Error(`HTTP error! status: ${response.status}`);
               }
             }
             showMessage(t('typesSaved'), 'success');
-            loadBuildingTypes(); // Перезагружаем типы
+            loadBuildingTypes();
           } catch (error) {
-            console.error('Ошибка сохранения:', error);
+            console.error('Save error:', error);
             showMessage(t('error'), 'error');
           }
         });
       }
       
-      // Запуск распределения
+      // Run distribution
       const runDistBtn = document.getElementById('runDistributionBtn');
       if (runDistBtn) {
-        console.log('Кнопка распределения найдена по ID');
         runDistBtn.addEventListener('click', async function(event) {
           event.preventDefault();
           
@@ -478,8 +370,6 @@
             
             if (result.status === 'success') {
               showMessage(t('distributionCompleted'), 'success');
-              
-              // Показываем результаты
               displayResults(result.data);
             } else {
               showMessage(`❌ ${result.message}`, 'error');
@@ -491,10 +381,106 @@
         });
       }
 
-      // Функция для отображения результатов
+      // Сброс слота 1
+      const resetSlot1Btn = document.getElementById('resetSlot1Btn');
+      if (resetSlot1Btn) {
+        resetSlot1Btn.addEventListener('click', resetSlot1);
+      }
+
+      // Сброс слота 2
+      const resetSlot2Btn = document.getElementById('resetSlot2Btn');
+      if (resetSlot2Btn) {
+        resetSlot2Btn.addEventListener('click', resetSlot2);
+      }
+
+      // Display player statistics
+      function displayPlayerStats(players) {
+        const statsContainer = document.getElementById('playerStats');
+        if (!statsContainer) return;
+        
+        const total = players.length;
+        
+        const typeCount = { fighter:0, archer:0, rider:0 };
+        const levelCount = {};
+        const slotCount = { slot1:0, slot2:0, any:0 };
+        const captainDesire = { Да:0, Нет:0, 'Не важно':0 };
+        
+        players.forEach(p => {
+          if (p.troop_type === 'fighter') typeCount.fighter++;
+          else if (p.troop_type === 'archer') typeCount.archer++;
+          else if (p.troop_type === 'rider') typeCount.rider++;
+          
+          levelCount[p.level] = (levelCount[p.level] || 0) + 1;
+          
+          if (p.slot === 'slot1') slotCount.slot1++;
+          else if (p.slot === 'slot2') slotCount.slot2++;
+          else slotCount.any++;
+          
+          const desire = p.wants_captain || 'Не важно';
+          captainDesire[desire] = (captainDesire[desire] || 0) + 1;
+        });
+        
+        const sortedLevels = Object.keys(levelCount).sort((a, b) => {
+          const numA = parseInt(a.replace('T','')) || 0;
+          const numB = parseInt(b.replace('T','')) || 0;
+          return numB - numA;
+        });
+        
+        let html = `
+          <h2 class="text-2xl font-semibold mb-4">${t('analytics')}</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h3 class="font-bold mb-2">${t('total')}</h3>
+              <table class="w-full">
+                <tr><td class="py-1">${t('total')}:</td><td class="text-right font-bold">${total}</td></tr>
+              </table>
+            </div>
+            <div>
+              <h3 class="font-bold mb-2">${t('byType')}</h3>
+              <table class="w-full">
+                <tr><td class="py-1">${t('fighter')}:</td><td class="text-right font-bold">${typeCount.fighter} (${((typeCount.fighter/total)*100).toFixed(1)}%)</td></tr>
+                <tr><td class="py-1">${t('archer')}:</td><td class="text-right font-bold">${typeCount.archer} (${((typeCount.archer/total)*100).toFixed(1)}%)</td></tr>
+                <tr><td class="py-1">${t('rider')}:</td><td class="text-right font-bold">${typeCount.rider} (${((typeCount.rider/total)*100).toFixed(1)}%)</td></tr>
+              </table>
+            </div>
+            <div>
+              <h3 class="font-bold mb-2">${t('byLevel')}</h3>
+              <table class="w-full">
+        `;
+        
+        sortedLevels.slice(0,5).forEach(level => {
+          const count = levelCount[level];
+          html += `<tr><td class="py-1">${level}:</td><td class="text-right font-bold">${count} (${((count/total)*100).toFixed(1)}%)</td></tr>`;
+        });
+        
+        html += `
+              </table>
+            </div>
+            <div>
+              <h3 class="font-bold mb-2">${t('bySlot')}</h3>
+              <table class="w-full">
+                <tr><td class="py-1">${t('slot1')}:</td><td class="text-right font-bold">${slotCount.slot1}</td></tr>
+                <tr><td class="py-1">${t('slot2')}:</td><td class="text-right font-bold">${slotCount.slot2}</td></tr>
+                <tr><td class="py-1">${t('any')}:</td><td class="text-right font-bold">${slotCount.any}</td></tr>
+              </table>
+            </div>
+            <div class="md:col-span-2">
+              <h3 class="font-bold mb-2">${t('byCaptain')}</h3>
+              <table class="w-full">
+                <tr><td class="py-1">${t('wantCaptain')}:</td><td class="text-right font-bold">${captainDesire['Да'] || 0}</td></tr>
+                <tr><td class="py-1">${t('dontWantCaptain')}:</td><td class="text-right font-bold">${captainDesire['Нет'] || 0}</td></tr>
+                <tr><td class="py-1">${t('indifferent')}:</td><td class="text-right font-bold">${captainDesire['Не важно'] || 0}</td></tr>
+              </table>
+            </div>
+          </div>
+        `;
+        
+        statsContainer.innerHTML = html;
+        statsContainer.classList.remove('hidden');
+      }
+
       function displayResults(data) {
         document.getElementById('results').classList.remove('hidden');
-        
         displaySlotResults('slot1Results', data.slot1);
         displaySlotResults('slot2Results', data.slot2);
       }
@@ -509,7 +495,6 @@
           const buildingDiv = document.createElement('div');
           buildingDiv.className = 'border rounded p-4 mb-4';
           
-          // Используем переводы из translations
           const buildingName = translations[`tower_${building}`] || building;
           const troopType = translations[buildingData.troop_type] || buildingData.troop_type;
           
@@ -520,16 +505,16 @@
           const captainMarch = buildingData.captain_march || captain.march_size;
           
           html += `<div class="mb-3 p-2 bg-yellow-100 rounded">
-            <div class="font-semibold">${translations['captain'] || '👑 Капитан'}: ${captainAlliance}${captain.nickname}</div>
+            <div class="font-semibold">${translations['captain']}: ${captainAlliance}${captain.nickname}</div>
             <div class="text-sm grid grid-cols-2 gap-2 mt-1">
-              <span>${translations['ga'] || 'ГА'}: ${captain.group_attack?.toLocaleString()}</span>
-              <span>${translations['march'] || 'Марш'}: ${captain.march_size?.toLocaleString()}</span>
-              <span class="col-span-2 font-bold">${translations['captain'] || 'Капитан'}: ${captainMarch.toLocaleString()}</span>
+              <span>${translations['ga']}: ${captain.group_attack?.toLocaleString()}</span>
+              <span>${translations['march']}: ${captain.march_size?.toLocaleString()}</span>
+              <span class="col-span-2 font-bold">${translations['captain']}: ${captainMarch.toLocaleString()}</span>
             </div>
           </div>`;
           
           if (buildingData.participants && buildingData.participants.length > 0) {
-            html += `<div class="mb-2"><span class="font-semibold">${translations['participants'] || 'Участники'}:</span></div>`;
+            html += `<div class="mb-2"><span class="font-semibold">${translations['participants']}:</span></div>`;
             html += '<div class="space-y-1">';
             
             const participantsWithMarch = buildingData.participants.map(participant => {
@@ -557,20 +542,20 @@
             
             html += `<div class="mt-3 pt-2 border-t text-sm">
               <div class="flex justify-between">
-                <span>${translations['totalParticipants'] || 'Всего войск участников'}:</span>
+                <span>${translations['totalParticipants']}:</span>
                 <span class="font-bold">${participantsTotal.toLocaleString()}</span>
               </div>
               <div class="flex justify-between">
-                <span>${translations['captainGA'] || 'ГА капитана'}:</span>
+                <span>${translations['captainGA']}:</span>
                 <span class="font-bold">${captainGA.toLocaleString()}</span>
               </div>
               <div class="flex justify-between ${participantsTotal > captainGA ? 'text-red-600 font-bold' : 'text-green-600'}">
-                <span>${translations['usageGA'] || 'Использовано ГА'}:</span>
+                <span>${translations['usageGA']}:</span>
                 <span>${usagePercent}%</span>
               </div>
             </div>`;
           } else {
-            html += `<div class="text-gray-500 italic pl-4">${translations['no_participants'] || 'Нет участников'}</div>`;
+            html += `<div class="text-gray-500 italic pl-4">${translations['no_participants']}</div>`;
           }
           
           buildingDiv.innerHTML = html;

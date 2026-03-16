@@ -7,8 +7,7 @@ ko:
   maxInTower: '타워 최대 인원'
   maxInTC: 'TC 최대 인원'
   reservePerBuilding: '건물당 예비 인원'
-  no_file_chosen: '선택된 파일 없음'
-
+  
   # Building types
   buildingTypes: '🏢 건물 병종'
   auto: '🤖 자동'
@@ -61,6 +60,7 @@ ko:
   type: '유형'
   march: '행군'
   ga: 'GA'
+  no_players: '로드된 플레이어 없음'
   
   # Statistics
   analytics: '📊 플레이어 분석'
@@ -96,6 +96,91 @@ ko:
   # Statuses
   participant: '참가자'
   no_participants: '참가자 없음'
-  
-  # Additional message keys used in JavaScript
-  no_players: '로드된 플레이어 없음'
+  no_file_chosen: '선택된 파일 없음'
+
+    # Reset buttons
+  resetToDefault: '기본값으로 재설정'
+  confirmReset: '확실합니까? 이 슬롯의 모든 수동 설정이 삭제됩니다.'
+  slot1Reset: '슬롯 1이 자동 분배로 재설정되었습니다'
+  slot2Reset: '슬롯 2이 자동 분배로 재설정되었습니다'
+
+    # Instructions
+  instructions:
+    link: '설명서'
+    title: '사용자 가이드'
+    overview: '시스템 개요'
+    overview_text: '플레이어 분배 시스템은 플레이어의 특성에 따라 참가자를 타워(테크노 센터 및 터렛)와 시간 슬롯에 자동으로 배분합니다. CSV 파일로 플레이어 데이터를 업로드하고 매개변수를 설정한 후 분배를 실행하세요.'
+    
+    step1:
+      title: '데이터 준비'
+      description: '등록 양식을 만듭니다. 행군 크기, 그룹 공격 및 부대 전력을 지정할 때는 정수만 사용하세요. 1.455.455 또는 1,455,455,455와 같은 구분 기호는 사용하지 마십시오.'
+      note_title: '⚠️ 올바른 숫자 형식:'
+      note_text: '구분 기호 없이 정수만 사용하세요. 예: 1455455 (1.455.455 또는 1,455,455,455 사용 금지)'
+      form_link_text: '등록 양식 예시:'
+      form_link: 'Google Forms 템플릿'
+    
+    step2:
+      title: '파일 업로드'
+      step1: '"플레이어 데이터 업로드" 섹션으로 이동하세요'
+      step2: '메인 페이지의 양식을 사용하여 CSV 파일을 업로드하세요'
+      step3: '"업로드 및 처리" 버튼을 클릭하세요'
+      step4: '로드된 플레이어를 보려면 "로드된 플레이어 보기"를 클릭하세요'
+      step5: '오류가 발생하면 시스템에 메시지가 표시됩니다'
+      step6: '분배를 시작하려면 "분배 실행"을 클릭하세요'
+      logic_title: '분배 로직:'
+      logic1: '타워 대장은 전체 행군을 보냅니다'
+      logic2: '플레이어는 지정된 양의 부대를 보냅니다'
+      logic3: '대장은 선호도와 그룹 공격에 따라 선택됩니다'
+      logic4: '플레이어 강점은 보내는 부대의 비율에 영향을 미칩니다'
+    
+    step3:
+      title: '부대 유형 설정'
+      description: '각 슬롯에 대해 수동으로 부대 유형을 선택하거나 자동 분배를 선택할 수 있습니다. "재설정" 버튼을 사용하여 자동 모드로 돌아갈 수 있습니다.'
+    
+    step4:
+      title: '분배 실행'
+      description: '"분배 실행" 버튼을 클릭하여 플레이어를 타워에 자동으로 분배하세요. 결과는 아래에 표시됩니다.'
+    
+    csvFormat: 'CSV 파일 형식'
+    csvNote: '첫 번째 행에는 열 헤더가 포함되어야 합니다. 열 순서가 중요합니다! troop_type 허용 값: Fighter, Archer, Rider. slot 허용 값: slot1, slot2, any.'
+    
+    table:
+      column: '열'
+      description: '설명'
+      example: '예시'
+      nickname: '플레이어 닉네임'
+      alliance: '연맹'
+      troop_type: '부대 유형 (Fighter/Archer/Rider)'
+      level: '레벨 (T14, T13, T12...)'
+      march_size: '행군 크기'
+      group_attack: '그룹 공격'
+      troop_power: '부대 전력'
+      slot: '슬롯 (slot1/slot2/any)'
+      wants_captain: '대장 희망 여부 (예/아니오/상관없음)'
+    
+    troopTypes: '부대 유형'
+    fighter: '보병'
+    archer: '궁병'
+    rider: '기병'
+    
+    slots: '슬롯 (교대)'
+    slot1: '첫 번째 교대'
+    slot2: '두 번째 교대'
+    any: '모든 교대 참여 가능'
+    
+    buildingSettings: '슬롯별 건물 설정'
+    buildingDescription: '각 교대마다 건물에 다른 부대 유형을 설정할 수 있습니다. 이를 통해 다양한 플레이어 구성에 맞게 유연하게 배분할 수 있습니다.'
+    slot1Example1: '첫 번째 교대에 더 많은 기병 설정'
+    slot1Example2: '자동 분배를 위해 자동 모드 유지'
+    slot2Example1: '두 번째 교대에 더 많은 보병 설정'
+    slot2Example2: '"재설정" 버튼으로 자동 설정 복귀'
+    
+    tips: '유용한 팁'
+    tip1: 'CSV 파일에 빈 행이 없고 모든 열이 채워져 있는지 확인하세요'
+    tip2: '자동 분배를 위해 설정에서 부대 유형을 비워두세요("자동" 선택)'
+    tip3: '"대장 희망"으로 표시된 플레이어는 대장 선택 시 우선권을 받습니다'
+    tip4: '분배 후 페이지 하단의 별도 블록에서 미배치 플레이어를 확인할 수 있습니다'
+    
+    images:
+      form_export: '등록 양식에서 데이터 내보내기'
+      sheets_export: 'Google Sheets에서 데이터 내보내기'
