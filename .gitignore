@@ -33,3 +33,8 @@
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
+
+# Ignore bundler vendor directory
+/vendor/bundle
+/vendor/cache
+/vendor/ruby
